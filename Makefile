@@ -22,6 +22,13 @@ shared: CFLAGS += -fPIC
 shared: $(BUILD_DIR)
 	$(CC) $(CFLAGS) -shared src/*.c -Iinclude -lm -o $(BUILD_DIR)/libcexpr.so
 
+# Build CPython extension module (requires python3-config)
+.PHONY: pyext
+pyext: $(LIB)
+	PY_CFLAGS=$(shell python3-config --cflags)
+	PY_LDFLAGS=$(shell python3-config --ldflags)
+	$(CC) -fPIC -shared $(CFLAGS) $(PY_CFLAGS) python-binding/cexprmodule.c $(LIB) -o python-binding/cexpr.so $(PY_LDFLAGS) -lm
+
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
