@@ -1,0 +1,13 @@
+# Build artifacts
+libcexpr.a
+calc_test
+*.o
+src/*.o
+*.a
+*.so
+
+# Editor backup files
+*~
+*.swp
+
+.DS_Store
