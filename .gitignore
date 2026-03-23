@@ -5,6 +5,7 @@ calc_test
 src/*.o
 *.a
 *.so
+build/
 
 # Editor backup files
 *~
