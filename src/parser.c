@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "calc_internal.h"
 
 static Node* parse_factor(Token* tokens, int *pos, int token_count){
@@ -7,6 +8,23 @@ static Node* parse_factor(Token* tokens, int *pos, int token_count){
     if (t.type == TOKEN_NUMBER){
         (*pos)++;
         return node_number(t.value);
+    }
+    if (t.type == TOKEN_IDENT){
+        /* identifier: either function call name(expr) or variable */
+        char fname[32];
+        strncpy(fname, t.name, sizeof fname);
+        fname[sizeof fname - 1] = '\0';
+        (*pos)++;
+        if (*pos < token_count && tokens[*pos].type == TOKEN_LPAREN){
+            (*pos)++; /* skip '(' */
+            Node* arg = parse_expression(tokens, pos, token_count);
+            if (*pos < token_count && tokens[*pos].type == TOKEN_RPAREN) (*pos)++;
+            else { fprintf(stderr, "Nieprawidłowa składnia: brak nawiasu zamykającego po funkcji %s\n", fname); }
+            return node_function(fname, arg);
+        } else {
+            /* treat as variable */
+            return node_variable(fname);
+        }
     }
     if (t.type == TOKEN_LPAREN){
         (*pos)++;

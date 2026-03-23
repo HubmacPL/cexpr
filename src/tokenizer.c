@@ -48,6 +48,24 @@ int tokenize(const char* expression, Token* tokens, int* token_count){
             prev_token = tokens[index - 1];
             i--;
         }
+        else if (isalpha((unsigned char)expression[i])){
+            /* identifier/function name */
+            int start = i;
+            int len = 0;
+            char buf[31];
+            while (isalnum((unsigned char)expression[i]) || expression[i]=='_'){
+                if (len < 30) buf[len++] = (char)tolower((unsigned char)expression[i]);
+                i++;
+            }
+            buf[len] = '\0';
+            if (index >= MAX_TOKENS) return 0;
+            tokens[index].type = TOKEN_IDENT;
+            strncpy(tokens[index].name, buf, sizeof tokens[index].name);
+            tokens[index].name[sizeof tokens[index].name - 1] = '\0';
+            index++;
+            prev_token = tokens[index - 1];
+            i--;
+        }
         else if (expression[i] == '+' || expression[i] == '-' || expression[i] == '*' || expression[i] == '/' || expression[i] == '^'){
             if(prev_token.type == TOKEN_OPERATOR || prev_token.type == TOKEN_LPAREN || index == 0){
                 return 0;

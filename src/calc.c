@@ -4,6 +4,9 @@
 #include "calc_internal.h"
 #include <math.h>
 
+/* value for variable 'x' used by evaluator */
+double current_var_x = 0.0;
+
 /* internal evaluator with error reporting */
 static double calc_eval_internal(const char *expr, int *err){
     if (err) *err = 0;
@@ -30,5 +33,13 @@ double evaluate_expression(const char *expr){
     int err = 0;
     double r = calc_eval_internal(expr, &err);
     (void)err; // caller only gets NaN on error
+    return r;
+}
+
+double evaluate_expression_with_x(const char *expr, double x){
+    int err = 0;
+    current_var_x = x;
+    double r = calc_eval_internal(expr, &err);
+    (void)err;
     return r;
 }
