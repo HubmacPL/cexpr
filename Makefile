@@ -34,12 +34,12 @@ shared: $(BUILD_DIR)
 
 # Build CPython extension module (requires python3-config)
 .PHONY: pyext
-pyext: $(LIB)
+pyext:
 	@if [ -z "$(PY3_CONFIG)" ]; then \
 		echo "python3-config not found. Install Python development headers (e.g. python3-dev) and ensure python3-config is in PATH."; \
 		exit 1; \
 	fi
-	$(CC) -fPIC -shared $(CFLAGS) $(PY_CFLAGS) python-binding/cexprmodule.c $(LIB) -o python-binding/cexpr.so $(PY_LDFLAGS) -lm
+	$(CC) -fPIC -shared $(CFLAGS) $(PY_CFLAGS) src/*.c python-binding/cexprmodule.c -Iinclude -o python-binding/cexpr.so $(PY_LDFLAGS) -lm
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)

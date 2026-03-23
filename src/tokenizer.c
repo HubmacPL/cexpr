@@ -50,7 +50,6 @@ int tokenize(const char* expression, Token* tokens, int* token_count){
         }
         else if (isalpha((unsigned char)expression[i])){
             /* identifier/function name */
-            int start = i;
             int len = 0;
             char buf[31];
             while (isalnum((unsigned char)expression[i]) || expression[i]=='_'){

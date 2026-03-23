@@ -4,6 +4,7 @@
 
 /* Wrapper: evaluate_expression(const char*) -> double */
 static PyObject *py_evaluate(PyObject *self, PyObject *args){
+    (void)self;
     const char *expr;
     if (!PyArg_ParseTuple(args, "s", &expr)) return NULL;
     double r = evaluate_expression_with_x(expr, 0.0);
@@ -12,6 +13,7 @@ static PyObject *py_evaluate(PyObject *self, PyObject *args){
 
 /* Wrapper: evaluate_expression_with_x(const char*, double) -> double */
 static PyObject *py_evaluate_with_x(PyObject *self, PyObject *args){
+    (void)self;
     const char *expr;
     double x;
     if (!PyArg_ParseTuple(args, "sd", &expr, &x)) return NULL;
@@ -30,7 +32,8 @@ static struct PyModuleDef cexprmodule = {
     "cexpr",
     "C Expression evaluator bindings",
     -1,
-    CexprMethods
+    CexprMethods,
+    NULL, NULL, NULL, NULL
 };
 
 PyMODINIT_FUNC PyInit_cexpr(void){
