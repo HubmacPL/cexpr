@@ -1,13 +1,15 @@
-Python bindings (ctypes) for cexpr
+CPython extension bindings for cexpr
 
-This folder contains a minimal ctypes-based wrapper and an example plot script.
+This folder contains a CPython extension scaffold and an example plot script.
 
 Quick start:
-1. Build shared library:
+1. Build the static library and extension module:
 
-   make shared
+   make
+   make pyext
 
-   resulting file: build/libcexpr.so (Linux/macOS) or create a DLL on Windows.
+   - `make` builds `build/libcexpr.a` and `build/calc_test`.
+   - `make pyext` builds the CPython extension `python-binding/cexpr.so` (requires Python development headers and `python3-config`).
 
 2. Install Python deps:
 
@@ -17,7 +19,11 @@ Quick start:
 
    python3 python-binding/plot_expr.py
 
+Notes:
+- If `make pyext` fails with `Python.h: No such file or directory`, install Python development headers (e.g. `sudo apt install python3-dev` on Debian/Ubuntu) and ensure `python3-config` is available.
+- On Windows you will need an appropriate build toolchain (MSVC or MinGW) and may need to build a `.pyd` instead; instructions vary by environment.
+
 Files:
-- `ctypes_wrapper.py` — simple ctypes loader and helper `evaluate(expr, x)`.
-- `plot_expr.py` — example that plots expression over range using matplotlib.
+- `cexprmodule.c` — CPython extension source.
+- `plot_expr.py` — example that imports the `cexpr` module and plots f(x).
 - `requirements.txt` — numpy, matplotlib
