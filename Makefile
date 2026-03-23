@@ -5,6 +5,16 @@ CFLAGS = -g -O2 -std=c11 -Wall -Wextra -Iinclude
 ARFLAGS = rcs
 LDFLAGS = -lm
 
+# python3-config detection and flags (computed at make parse time)
+PY3_CONFIG := $(shell command -v python3-config 2>/dev/null)
+ifeq ($(PY3_CONFIG),)
+PY_CFLAGS :=
+PY_LDFLAGS :=
+else
+PY_CFLAGS := $(shell python3-config --cflags)
+PY_LDFLAGS := $(shell python3-config --ldflags)
+endif
+
 SRCS = $(wildcard src/*.c)
 BUILD_DIR = build
 OBJS = $(patsubst src/%.c,$(BUILD_DIR)/%.o,$(SRCS))
@@ -25,8 +35,10 @@ shared: $(BUILD_DIR)
 # Build CPython extension module (requires python3-config)
 .PHONY: pyext
 pyext: $(LIB)
-	PY_CFLAGS=$(shell python3-config --cflags)
-	PY_LDFLAGS=$(shell python3-config --ldflags)
+	@if [ -z "$(PY3_CONFIG)" ]; then \
+		echo "python3-config not found. Install Python development headers (e.g. python3-dev) and ensure python3-config is in PATH."; \
+		exit 1; \
+	fi
 	$(CC) -fPIC -shared $(CFLAGS) $(PY_CFLAGS) python-binding/cexprmodule.c $(LIB) -o python-binding/cexpr.so $(PY_LDFLAGS) -lm
 
 $(BUILD_DIR):
