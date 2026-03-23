@@ -16,6 +16,12 @@ TEST = $(BUILD_DIR)/calc_test
 
 all: $(LIB) $(TEST)
 
+# build shared library for Python bindings
+.PHONY: shared
+shared: CFLAGS += -fPIC
+shared: $(BUILD_DIR)
+	$(CC) $(CFLAGS) -shared src/*.c -Iinclude -lm -o $(BUILD_DIR)/libcexpr.so
+
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
