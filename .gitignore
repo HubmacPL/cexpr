@@ -13,3 +13,18 @@ build/
 
 .DS_Store
 .venv
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+
+# VS Code
+.vscode/
+
+# Wheels / installers
+*.whl
+
+# PyCexpr installation folder wheel (keep README and scripts, ignore wheel)
+PyCexpr-Installation/*.whl
