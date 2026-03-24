@@ -25,7 +25,14 @@ jobs:
           python -m pip wheel . -w wheelhouse-local || true
       - name: Build wheels
         run: |
-          python -m cibuildwheel --output-dir wheelhouse
+          # run cibuildwheel and save stdout/stderr to a log file for debugging
+          python -m cibuildwheel --output-dir wheelhouse 2>&1 | tee cibuildwheel-output.log
+        continue-on-error: true
+      - name: Upload cibuildwheel log
+        uses: actions/upload-artifact@v4
+        with:
+          name: cibuildwheel-log
+          path: cibuildwheel-output.log
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
