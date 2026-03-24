@@ -18,6 +18,7 @@ setup(
     long_description='CPython extension wrapping the cexpr C library.',
     long_description_content_type='text/markdown',
     ext_modules=[cexpr_ext],
+    python_requires='>=3.8',
     license='MIT',
     classifiers=[
         'Programming Language :: Python :: 3',
