@@ -18,9 +18,14 @@ jobs:
       - name: Install build deps
         run: |
           python -m pip install --upgrade pip setuptools wheel cibuildwheel==2.5.0
+      - name: Quick local wheel build (debug)
+        run: |
+          # try building a wheel on the runner to expose compile errors before cibuildwheel/Docker
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip wheel . -w wheelhouse-local || true
       - name: Build wheels
         run: |
-          python -m cibuildwheel --output-dir wheelhouse
+          python -m cibuildwheel --output-dir wheelhouse --verbosity 3
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
